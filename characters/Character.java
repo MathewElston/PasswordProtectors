@@ -24,6 +24,12 @@ public abstract class Character extends ImageView implements Comparable<Characte
     public Character(Image[] frames) {
         super(frames[0]);
         this.idleFrames = frames;
+        this.level = 1;
+        this.attack = 5;
+        this.defense = 2;
+        this.speed = 3;
+        this.maxHealth = 200;
+        this.health = this.maxHealth;
     }
     public Character (Image[] frames,String name, int level, int attack, int defense,int speed, int maxHealth) {
         super(frames[0]);

@@ -15,6 +15,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
         // Create some controls to add to the menu
+
         Label label1 = new Label("Enter your name:");
         TextField textField1 = new TextField();
         Button button1 = new Button("OK");

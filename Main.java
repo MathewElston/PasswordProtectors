@@ -79,6 +79,7 @@ public class Main extends Application {
             player.update();
             hacker.update();
             hacker.setScaleX(-1);
+
             previousFrame = now;
         }
     }
@@ -88,13 +89,13 @@ public class Main extends Application {
     Label healthLabel = new Label("Health");
     Label abilityLabel = new Label("Ability");
 
-    Label playerNameLabel = new Label("Player");
-    Label playerHealthLabel = new Label("100/100");
-    Label playerAPLabel = new Label("10/10");
-    Label hackerNameLabel = new Label("Hacker");
-    Label hackerHealthLabel = new Label("80/100");
-    Label hackerAPLabel = new Label("10/10");
-    Label dialogueLabel = new Label("Some dialogue here");
+    Label playerNameLabel = new Label(player.getName());
+    Label playerHealthLabel = new Label(player.getHealth()+ "/ "+player.getMaxHealth());
+    Label playerAPLabel = new Label(player.getAbilityPoints()+ "/ "+player.getAbilityPoints());
+    Label hackerNameLabel = new Label(hacker.getHealth()+ "/ "+ hacker.getMaxHealth());
+    Label hackerHealthLabel = new Label();
+    Label hackerAPLabel = new Label();
+    Label dialogueLabel = new Label("");
     Label passwordStrengthLabel = new Label();
     Button attackButton = new Button("Attack");
     Button abilityButton = new Button("Ability");
@@ -104,15 +105,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // set sizes
-        //player.setFitHeight(150);
         player.autosize();
-        //player.setFitWidth(150);
         player.setPreserveRatio(true);
-        //hacker.setFitHeight(150);
-        //hacker.setFitWidth(150);
-        player.autosize();
+        player.setName("Player");
+        hacker.autosize();
         hacker.setPreserveRatio(true);
+        hacker.setName("HackBot");
 
         // Declare mainContainers
         VBox mainContainer = new VBox();
@@ -256,8 +254,6 @@ public class Main extends Application {
         passwoordMenuRoot.getChildren().add(passwordManagerMainContainer);
         popupPasswordMenu.getContent().add(passwoordMenuRoot);
 
-
-
         /*
          * passwordManager Button events
          */
@@ -314,6 +310,13 @@ public class Main extends Application {
         updatePasswordButton.setOnAction(event -> {
         popupPasswordMenu.show(primaryStage);
 
+        });
+
+        // Attack Button
+        attackButton.setOnAction(event -> {
+            player.attack(hacker);
+            dialogueLabel.setText(player.getName() + " attacks " + hacker.getName() + " for "+ player.getAttack());
+            hackerHealthLabel.setText(hacker.getHealth() +" / " +hacker.getMaxHealth());
         });
 
 
