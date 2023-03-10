@@ -16,6 +16,8 @@ public abstract class Character extends ImageView implements Comparable<Characte
     private boolean isDefeated = false;
     ArrayList<Ability> abilities = new ArrayList<>();
     private Image[] idleFrames;
+    private Image[] attackFrames;
+    private Image[] currentAnimation;
     int currentFrame = 0;
 
     public Character () {
@@ -161,5 +163,8 @@ public abstract class Character extends ImageView implements Comparable<Characte
     }
     public void setIdleFrames(Image[] idleFrames) {
         this.idleFrames = idleFrames;
+    }
+    public void setCurrentAnimation(Image[] currentAnimation) {
+        this.currentAnimation = currentAnimation;
     }
 }

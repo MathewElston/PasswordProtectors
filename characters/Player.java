@@ -24,6 +24,10 @@ public class Player extends Character {
     public void defeated() {
         // lose game
     }
+    @Override
+    public void attack(Character target) {
+        super.attack(target);
+    }
     public void levelUp() {
         this.setLevel(this.getLevel() + 1);
         this.experience = 0;

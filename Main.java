@@ -30,6 +30,8 @@ import passwords.Password;
 
 import java.util.Random;
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
+import javafx.util.Duration;
 
 public class Main extends Application {
 
@@ -73,16 +75,6 @@ public class Main extends Application {
             update(timeStamp);
         }
     };
-    public void update(long timeStamp) {
-        long now = System.currentTimeMillis();
-        if (now - previousFrame > 35) {
-            player.update();
-            hacker.update();
-            hacker.setScaleX(-1);
-
-            previousFrame = now;
-        }
-    }
 
     // main window control items
     Label nameLabel = new Label("Name");
@@ -92,17 +84,42 @@ public class Main extends Application {
     Label playerNameLabel = new Label(player.getName());
     Label playerHealthLabel = new Label(player.getHealth()+ "/ "+player.getMaxHealth());
     Label playerAPLabel = new Label(player.getAbilityPoints()+ "/ "+player.getAbilityPoints());
-    Label hackerNameLabel = new Label(hacker.getHealth()+ "/ "+ hacker.getMaxHealth());
+
+    Label hackerNameLabel = new Label();
     Label hackerHealthLabel = new Label();
     Label hackerAPLabel = new Label();
+
     Label dialogueLabel = new Label("");
+    FadeTransition fadeTransition = new FadeTransition(Duration.seconds(3), dialogueLabel);
     Label passwordStrengthLabel = new Label();
     Button attackButton = new Button("Attack");
     Button abilityButton = new Button("Ability");
     Button infoButton = new Button("Info");
     Button updatePasswordButton = new Button("Update Password");
     StackPane root = new StackPane();
+    
 
+    public void updateUI() {
+        playerNameLabel.setText(player.getName());
+        playerHealthLabel.setText(player.getHealth()+ "/ "+player.getMaxHealth());
+        playerAPLabel.setText(player.getAbilityPoints()+ "/ "+player.getAbilityPoints());
+
+        hackerNameLabel.setText(hacker.getName());
+        hackerHealthLabel.setText(hacker.getHealth()+ "/ "+hacker.getMaxHealth());
+        hackerAPLabel.setText(hacker.getAbilityPoints()+ "/ "+hacker.getAbilityPoints());
+
+    }
+    public void update(long timeStamp) {
+        long now = System.currentTimeMillis();
+        if (now - previousFrame > 35) {
+            player.update();
+            hacker.update();
+            hacker.setScaleX(-1);
+            updateUI();
+
+            previousFrame = now;
+        }
+    }
     @Override
     public void start(Stage primaryStage) throws Exception {
         player.autosize();
@@ -292,14 +309,9 @@ public class Main extends Application {
             popupPasswordMenu.hide();
         });
         
-        /*
-         * Password Manager End
-         */
-
          
         // add main container children to root
         mainContainer.getChildren().addAll(dialogueContainer, spriteContainer, bottomContainer);
-    
         root.getChildren().addAll(mainContainer);
 
         /*
@@ -316,7 +328,17 @@ public class Main extends Application {
         attackButton.setOnAction(event -> {
             player.attack(hacker);
             dialogueLabel.setText(player.getName() + " attacks " + hacker.getName() + " for "+ player.getAttack());
-            hackerHealthLabel.setText(hacker.getHealth() +" / " +hacker.getMaxHealth());
+            fadeTransition.setFromValue(1.0);
+            fadeTransition.setToValue(0.0);
+            fadeTransition.play();
+            if (hacker.checkDefeat()) {
+                hacker.defeated();
+                dialogueLabel.setText(hacker.getName() +" has been defeated!");
+                fadeTransition.setFromValue(1.0);
+                fadeTransition.setToValue(0.0);
+                fadeTransition.play();
+
+            }
         });
 
 
