@@ -6,12 +6,13 @@ import java.util.ArrayList;
 
 public class Player extends Character {
     private ArrayList<Password> passwordManager = new ArrayList<>();
-    private Password equippedPassword;
+    private Password equippedPassword = new Password("Default");
     private int experience = 0;
     private int requiredExp  = 250;
 
     public Player() {
         super();
+        
     }
     public Player(Image[] frames) {
         super(frames);

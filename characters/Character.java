@@ -32,6 +32,7 @@ public abstract class Character extends ImageView implements Comparable<Characte
         this.speed = 3;
         this.maxHealth = 200;
         this.health = this.maxHealth;
+        
     }
     public Character (Image[] frames,String name, int level, int attack, int defense,int speed, int maxHealth) {
         super(frames[0]);

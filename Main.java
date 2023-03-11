@@ -8,6 +8,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
 
 import javafx.scene.image.*;
 import javafx.scene.layout.BorderPane;
@@ -27,6 +28,7 @@ import characters.Player;
 import characters.Character;
 import characters.Hacker;
 import passwords.Password;
+import battle.BattleState;
 
 import java.util.Random;
 import javafx.animation.AnimationTimer;
@@ -34,6 +36,8 @@ import javafx.animation.FadeTransition;
 import javafx.util.Duration;
 
 public class Main extends Application {
+    BattleState battleState;
+
 
     // set up idle sprites and animation
     Image[] boyIdleFrames = new Image[] {
@@ -134,6 +138,29 @@ public class Main extends Application {
         VBox buttonContainer = new VBox();
         BorderPane borderPane = new BorderPane();
 
+        VBox passwordStrengthContainer = new VBox();
+        Label passwordProgressLabel = new Label("Password Strength");
+        passwordProgressLabel.setStyle("-fx-text-fill: white;");
+        Label passwordManagerStrengthLabel = new Label();
+        ProgressBar passwordProgress = new ProgressBar();
+        passwordProgress.autosize();
+
+        passwordProgress.setProgress(((Player)player).getEquippedPassword().checkPasswordStrength() / 5 + 0.1);
+        if (passwordProgress.getProgress() < 0.25) {
+            passwordProgress.setStyle("-fx-accent: red;");
+            passwordManagerStrengthLabel.setStyle("-fx-text-fill: rgb(229, 57, 53);");
+            passwordManagerStrengthLabel.setText("WEAK");
+        } else if (passwordProgress.getProgress() >= 0.25 && passwordProgress.getProgress() <.80 ) {
+            passwordProgress.setStyle("-fx-accent: yellow;");
+            passwordManagerStrengthLabel.setStyle("-fx-text-fill:  rgb(255, 185, 0);");
+            passwordManagerStrengthLabel.setText("MEDIUM");
+        } else if ((passwordProgress.getProgress() >= 0.80))  {
+            passwordProgress.setStyle("-fx-accent: green;");
+            passwordManagerStrengthLabel.setStyle("-fx-text-fill: rgb(25,45,200);");
+            passwordManagerStrengthLabel.setText("STRONG");
+        }
+        passwordStrengthContainer.getChildren().addAll(passwordProgressLabel, passwordProgress, passwordManagerStrengthLabel);
+
         // Add buttons to appropiate containers
         HBox topButtons = new HBox(attackButton, abilityButton);
         HBox bottomButtons = new HBox(infoButton, updatePasswordButton);
@@ -179,22 +206,17 @@ public class Main extends Application {
         dialogueBox.setStyle("-fx-background-color:rgb(25,45,200,0.8);");
 
         HBox bottomContainer = new HBox();
-        bottomContainer.getChildren().addAll(buttonContainer,fieldContainer);
+        bottomContainer.getChildren().addAll(buttonContainer,passwordStrengthContainer,fieldContainer);
         bottomContainer.autosize();
         bottomContainer.setStyle("-fx-background-color:rgba(25,45,200,0.8);");
+        bottomContainer.setSpacing(10);
+        bottomContainer.setAlignment(Pos.CENTER);
 
-        HBox.setHgrow(buttonContainer, Priority.ALWAYS);
-        HBox.setHgrow(fieldContainer, Priority.ALWAYS);
-
-        fieldContainer.setAlignment(Pos.BOTTOM_LEFT);
         // Password Strength and Center Containers
         HBox spriteContainer = new HBox();
-        VBox passwordStrengthContainer = new VBox();
-        HBox passwordStrengthBox = new HBox(passwordStrengthLabel);
         VBox characterSpriteContainer = new VBox(player);
         VBox hackerSpriteContainer = new VBox(hacker);
-        passwordStrengthContainer.getChildren().addAll(passwordStrengthBox);
-        spriteContainer.getChildren().addAll(characterSpriteContainer, passwordStrengthContainer, hackerSpriteContainer);
+        spriteContainer.getChildren().addAll(characterSpriteContainer, hackerSpriteContainer);
         spriteContainer.setStyle("-fx-background-image: url(cyberpunk_background.png);"
         + "-fx-background-size: cover;");
 
@@ -207,8 +229,6 @@ public class Main extends Application {
         VBox passwordManagerMainContainer = new VBox();
         // Labels
         VBox passwordManagerLabelContainer = new VBox();
-        Label passwordManagerStrengthLabel = new Label("Password Strength is: "); // < ----- 
-        passwordManagerLabelContainer.getChildren().addAll(passwordManagerStrengthLabel);
         passwordManagerMainContainer.getChildren().add(passwordManagerLabelContainer);
         
         // passPhrase List Views
@@ -250,7 +270,13 @@ public class Main extends Application {
         for (int i = 0; i < ((Player)player).getPasswordManager().size(); i++) {
             passwordListView.getItems().add(((Player)player).getPasswordManager().get(i));
         }
-        passwordBox.getChildren().addAll(passwordLabel, passwordListView);
+        HBox equipBox = new HBox();
+        Button equipButton = new Button("Equip");
+        Label equipLabel = new Label("Currently equipped: ");
+        Label currentEquipped = new Label();
+        currentEquipped.setText(((Player)player).getEquippedPassword().getValue());
+        equipBox.getChildren().addAll(equipButton,equipLabel,currentEquipped);
+        passwordBox.getChildren().addAll(passwordLabel, passwordListView,equipBox);
         passPhraseContainer.getChildren().addAll(wordPhraseBox, digitPhraseBox, specialCharPhraseBox,passwordBox);
         passwordManagerMainContainer.getChildren().add(passPhraseContainer);
         
@@ -274,7 +300,7 @@ public class Main extends Application {
         /*
          * passwordManager Button events
          */
-        passwordManagerAddButton.setOnAction(event ->{
+        passwordManagerAddButton.setOnAction(event -> {
             // add the the last item the ((Player)player)s password manager arraylist to the listview if string isn't null.
             if (wordPhraseListView.getSelectionModel().getSelectedItem() !=null && digitPhraseListView.getSelectionModel().getSelectedItem() !=null && specialCharPhraseListView.getSelectionModel().getSelectedItem() != null) {
                 String fullString = "";
@@ -293,8 +319,8 @@ public class Main extends Application {
                 
             }
         });
-        passwordManagerRandomButton.setOnAction( event -> {
-            String randomString ="";
+        passwordManagerRandomButton.setOnAction(event -> {
+            String randomString = "";
             Random random = new Random(System.nanoTime());
             int wordPhraseIndex = random.nextInt(wordPhraseListView.getItems().size()); 
             int digitPhraseIndex = random.nextInt(digitPhraseListView.getItems().size()); 
@@ -308,8 +334,28 @@ public class Main extends Application {
         passwordManagerCloseButton.setOnAction(event -> {
             popupPasswordMenu.hide();
         });
+
+        equipButton.setOnAction(event -> {
+            if ((passwordListView.getSelectionModel().getSelectedItem() != null)) {
+                ((Player)player).setEquippedPassword(passwordListView.getSelectionModel().getSelectedItem());
+                currentEquipped.setText(((Player)player).getEquippedPassword().getValue());
+                passwordProgress.setProgress(((Player)player).getEquippedPassword().checkPasswordStrength() / 5);
+        if (passwordProgress.getProgress() < 0.25) {
+            passwordProgress.setStyle("-fx-accent: red;");
+            passwordManagerStrengthLabel.setStyle("-fx-text-fill: rgb(229, 57, 53);");
+            passwordManagerStrengthLabel.setText("WEAK");
+        } else if (passwordProgress.getProgress() >= 0.25 && passwordProgress.getProgress() <.80 ) {
+            passwordProgress.setStyle("-fx-accent: yellow;");
+            passwordManagerStrengthLabel.setStyle("-fx-text-fill: rgb(255, 185, 0);");
+            passwordManagerStrengthLabel.setText("MEDIUM");
+        } else if ((passwordProgress.getProgress() >= 0.80))  {
+            passwordProgress.setStyle("-fx-accent: green;");
+            passwordManagerStrengthLabel.setStyle("-fx-text-fill: rgb(139, 195, 74);");
+            passwordManagerStrengthLabel.setText("STRONG");
+        }
+            }
+        });
         
-         
         // add main container children to root
         mainContainer.getChildren().addAll(dialogueContainer, spriteContainer, bottomContainer);
         root.getChildren().addAll(mainContainer);
@@ -320,8 +366,7 @@ public class Main extends Application {
         
         // updatePasswordButton will open a popup window includes password manager interface
         updatePasswordButton.setOnAction(event -> {
-        popupPasswordMenu.show(primaryStage);
-
+            popupPasswordMenu.show(primaryStage);
         });
 
         // Attack Button
@@ -337,7 +382,6 @@ public class Main extends Application {
                 fadeTransition.setFromValue(1.0);
                 fadeTransition.setToValue(0.0);
                 fadeTransition.play();
-
             }
         });
 
