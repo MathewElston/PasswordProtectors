@@ -1,6 +1,8 @@
 package passwords;
 
-public class Password implements PasswordStrengthChecker {
+import java.io.*;
+
+public class Password implements PasswordStrengthChecker, Serializable {
     private String value;
 
     public Password() {
@@ -64,5 +66,29 @@ public class Password implements PasswordStrengthChecker {
     @Override
     public String toString() {
         return this.value;
+    }
+
+    public void save(String file) {
+        try {
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
+            out.writeObject(this);
+            out.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public Password load(String file) {
+        try {
+            FileInputStream fileIn = new FileInputStream(file);
+            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
+            Object obj = objectIn.readObject();
+            objectIn.close();
+            return (Password) obj;
+        } catch (Exception e) {
+            System.out.println("Error:" + e.getMessage());
+            return null;
+        }
+
     }
 }

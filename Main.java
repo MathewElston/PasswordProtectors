@@ -1,5 +1,7 @@
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.LinkedList;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,9 +36,11 @@ import java.util.Random;
 import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.util.Duration;
+import java.util.Queue;
 
 public class Main extends Application {
-    BattleState battleState;
+    BattleState currentState;
+    Queue<Character> turnQueue = new LinkedList<>();
 
     // set up idle sprites and animation
     Image[] boyIdleFrames = new Image[] {
@@ -198,7 +202,7 @@ public class Main extends Application {
          * Password Manager Popup Menu Objects
          */
         Popup popupPasswordMenu = new Popup();
-        StackPane passwoordMenuRoot = new StackPane();
+        StackPane passwordMenuRoot = new StackPane();
         VBox passwordManagerMainContainer = new VBox();
         // Labels
         VBox passwordManagerLabelContainer = new VBox();
@@ -207,13 +211,54 @@ public class Main extends Application {
         // passPhrase List Views
         HBox passPhraseContainer = new HBox();
         ObservableList<String> wordPhraseList = FXCollections.observableArrayList(
+                "CandyRainbow",
+                "MagicalUnicorn",
+                "FriendlyDragon",
+                "LuckyLadybug",
+                "RainyDayFun",
+                "SuperheroAdventure",
+                "DinoRoar",
+                "SpaceExplorer",
+                "MysteryIsland",
+                "PirateTreasure",
+                "WildWestAdventure",
+                "RobotFriend",
+                "GardenButterfly",
+                "SafariAdventure",
+                "FairyTaleLand",
+                "UnderwaterWorld",
+                "ToyBoxSurprise",
+                "JungleExplorer",
+                "SportsChampion",
+                "PizzaParty",
                 "ILoveDolphins",
                 "CloudyWithMeatballs",
                 "PlayStationIsBestStation",
                 "HackersGoByeBye",
                 "TurtlesAreDinos",
                 "KnightsAreShiny",
-                "CatchMeInTheJungle");
+                "CatchMeInTheJungle",
+                "StarGazerDreams",
+                "RainbowButterfly",
+                "SunflowerSunshine",
+                "PirateTreasureIsland",
+                "MagicalUnicornLand",
+                "DragonFireBreath",
+                "UnderwaterAdventure",
+                "ForestFairyTale",
+                "CircusElephantShow",
+                "SpaceRocketExplorer",
+                "GardenLadybugFun",
+                "DinoRoarAttack",
+                "WizardMagicWand",
+                "RobotFriendForever",
+                "OceanMermaidCastle",
+                "RaceCarChampion",
+                "JungleSafariAdventure",
+                "KnightDragonBattle",
+                "HauntedHouseMystery",
+                "SportsSuperstarWin");
+
         VBox wordPhraseBox = new VBox();
         Label wordPhraseLabel = new Label("Get a passphrase below!");
         ListView<String> wordPhraseListView = new ListView<>(wordPhraseList);
@@ -240,14 +285,19 @@ public class Main extends Application {
         for (int i = 0; i < ((Player) player).getPasswordManager().size(); i++) {
             passwordListView.getItems().add(((Player) player).getPasswordManager().get(i));
         }
-        HBox equipBox = new HBox();
+        // equip container
+        VBox equipBox = new VBox();
         Button equipButton = new Button("Equip");
+        Button saveEquipButton = new Button("Save");
+        Button loadEquipButton = new Button("Load");
         Label equipLabel = new Label("Currently equipped: ");
         Label currentEquipped = new Label();
         currentEquipped.setText(((Player) player).getEquippedPassword().getValue());
-        equipBox.getChildren().addAll(equipButton, equipLabel, currentEquipped);
-        passwordBox.getChildren().addAll(passwordLabel, passwordListView, equipBox);
+        equipBox.getChildren().addAll(equipButton, saveEquipButton, loadEquipButton);
+        passwordBox.getChildren().addAll(passwordLabel, passwordListView);
         passPhraseContainer.getChildren().addAll(wordPhraseBox, digitPhraseBox, specialCharPhraseBox, passwordBox);
+        passPhraseContainer.autosize();
+
         passwordManagerMainContainer.getChildren().add(passPhraseContainer);
 
         // password manager buttons
@@ -260,13 +310,15 @@ public class Main extends Application {
 
         HBox passwordManagerFooterContainer = new HBox();
         Button passwordManagerCloseButton = new Button("Close");
-        passwordManagerFooterContainer.getChildren().addAll(passwordManagerButtonContainer, passwordManagerCloseButton);
+        passwordManagerFooterContainer.getChildren().addAll(passwordManagerButtonContainer,
+                equipBox, passwordManagerCloseButton, equipLabel, currentEquipped);
         passwordManagerFooterContainer.setAlignment(Pos.CENTER);
+        passwordManagerFooterContainer.setSpacing(25);
         passwordManagerMainContainer.getChildren().add(passwordManagerFooterContainer);
 
-        passwoordMenuRoot.setStyle("-fx-background-color: white;");
-        passwoordMenuRoot.getChildren().add(passwordManagerMainContainer);
-        popupPasswordMenu.getContent().add(passwoordMenuRoot);
+        passwordMenuRoot.setStyle("-fx-background-color: white;");
+        passwordMenuRoot.getChildren().add(passwordManagerMainContainer);
+        popupPasswordMenu.getContent().add(passwordMenuRoot);
 
         /*
          * passwordManager Button events
@@ -331,7 +383,10 @@ public class Main extends Application {
                 }
             }
         });
-
+        // save/load buttons
+        saveEquipButton.setOnAction(event -> {
+            ((Player) player).getEquippedPassword().save("myVault.ser");
+        });
         // add main container children to root
         VBox mainContainer = new VBox();
         mainContainer.getChildren().addAll(dialogueContainer, spriteContainer, bottomContainer);
@@ -355,9 +410,7 @@ public class Main extends Application {
             fadeTransition.setToValue(0.0);
             fadeTransition.play();
             playerProgressBar.setProgress(0);
-            playerProgressBar.getStyleClass().setAll("");
-            attackButton.setDisable(true);
-            abilityButton.setDisable(true);
+            turnQueue.poll();
             if (hacker.checkDefeat()) {
                 hacker.defeated();
                 dialogueLabel.setText(hacker.getName() + " has been defeated!");
@@ -381,36 +434,47 @@ public class Main extends Application {
         }
     };
 
-    public void updateState() {
-        
-    }
-    public void updateSpeed() {
-        double playerSpeed = (double) player.getSpeed() / 1000.0;
+    double timerSpeed = 500.0;
+
+    private void updatePlayerProgress() {
+        double playerSpeed = (double) player.getSpeed() / timerSpeed;
         double playerProgress = (double) playerProgressBar.getProgress();
         playerProgress += playerSpeed;
         playerProgressBar.setProgress(playerProgress);
-
-        if (playerProgress >= 1) {
-            playerProgressBar.setStyle("-fx-accent: rgb(57,255,20);");
-            attackButton.setDisable(false);
-            abilityButton.setDisable(true);
+        if (playerProgress >= 0 && playerProgress < 0.33) {
+            // set to progressbar color to red
+            playerProgressBar.setStyle("-fx-accent: rgb(255, 0, 51);");
+        } else if (playerProgress >= 0.33 && playerProgress < 1.0) {
+            // set progressbar color to yellow
+            playerProgressBar.setStyle("-fx-accent: rgb(255, 204, 0);");
+        } else if (playerProgress >= 1) {
+            if (!turnQueue.contains(player)) {
+                turnQueue.add(player);
+            }
+            playerProgressBar.setStyle("-fx-accent: rgb(0, 204, 102);");
         }
+    }
 
-        double enemySpeed = (double) hacker.getSpeed() / 1000.0;
+    private void updateEnemyProgress() {
+        double enemySpeed = (double) hacker.getSpeed() / timerSpeed;
         double enemyProgress = enemyProgressBar.getProgress();
         enemyProgress += enemySpeed;
-        if (enemyProgress >= 1) {
-            enemyProgressBar.setStyle("-fx-accent: rgb(57,255,20);");
-            hacker.takeTurn(player);
-            dialogueLabel.setText(hacker.getName() + " has attacked " + player.getName() + "!");
-            fadeTransition.setFromValue(1.0);
-            fadeTransition.setToValue(0.0);
-            fadeTransition.play();
-            enemyProgress = 0.0;
-            enemyProgressBar.setProgress(enemyProgress);
-            enemyProgressBar.getStyleClass().setAll("");
-        }
         enemyProgressBar.setProgress(enemyProgress);
+        if (enemyProgress >= 0 && enemyProgress < 0.33) {
+            enemyProgressBar.setStyle("-fx-accent: rgb(255, 0, 51);");
+        } else if (enemyProgress >= 0.33 && enemyProgress < 1) {
+            enemyProgressBar.setStyle("-fx-accent: rgb(255, 204, 0);");
+        } else if (enemyProgress >= 1) {
+            if (!turnQueue.contains(hacker)) {
+                turnQueue.add(hacker);
+            }
+            enemyProgressBar.setStyle("-fx-accent: rgb(0, 204, 102);");
+        }
+    }
+
+    public void updateSpeed() {
+        updatePlayerProgress();
+        updateEnemyProgress();
     }
 
     public void updateUI() {
@@ -423,17 +487,37 @@ public class Main extends Application {
         hackerAPLabel.setText(hacker.getAbilityPoints() + "/ " + hacker.getAbilityPoints());
     }
 
+    private void updateGameState() {
+        if (turnQueue.peek() == hacker) {
+            hacker.takeTurn(player);
+            dialogueLabel.setText(hacker.getName() + " has attacked " + player.getName() + "!");
+            fadeTransition.setFromValue(1.0);
+            fadeTransition.setToValue(0.0);
+            fadeTransition.play();
+            enemyProgressBar.setProgress(0);
+            turnQueue.poll();
+        } else if (turnQueue.peek() == player) {
+            attackButton.setDisable(false);
+            abilityButton.setDisable(false);
+        } else {
+            attackButton.setDisable(true);
+            abilityButton.setDisable(true);
+        }
+    }
+
     long previousFrame = 0;
+    int targetFPS = 30;
+    int targetMS = 1000 / targetFPS;
 
     public void update(long timeStamp) {
         long now = System.currentTimeMillis();
-        if (now - previousFrame > 35) {
+        if (now - previousFrame > targetMS) {
             player.update();
             hacker.update();
             hacker.setScaleX(-1);
             updateUI();
             updateSpeed();
-            // updateSpeed speed/100
+            updateGameState();
             previousFrame = now;
         }
     }
