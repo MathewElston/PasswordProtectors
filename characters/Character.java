@@ -1,4 +1,5 @@
 package characters;
+
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import abilities.Ability;
@@ -20,9 +21,10 @@ public abstract class Character extends ImageView implements Comparable<Characte
     private Image[] currentAnimation;
     int currentFrame = 0;
 
-    public Character () {
+    public Character() {
         super();
     }
+
     public Character(Image[] frames) {
         super(frames[0]);
         this.idleFrames = frames;
@@ -32,9 +34,10 @@ public abstract class Character extends ImageView implements Comparable<Characte
         this.speed = 3;
         this.maxHealth = 200;
         this.health = this.maxHealth;
-        
+
     }
-    public Character (Image[] frames,String name, int level, int attack, int defense,int speed, int maxHealth) {
+
+    public Character(Image[] frames, String name, int level, int attack, int defense, int speed, int maxHealth) {
         super(frames[0]);
         this.idleFrames = frames;
         this.name = name;
@@ -45,12 +48,15 @@ public abstract class Character extends ImageView implements Comparable<Characte
         this.maxHealth = maxHealth;
         this.health = maxHealth;
     }
+
     // compare speeds to determine the turn order
     @Override
     public int compareTo(Character other) {
         return Integer.compare(this.speed, other.speed);
     }
+
     public abstract void defeated();
+
     // useAbility()
     public void takeDamage(int amount) {
         this.health -= amount;
@@ -61,15 +67,17 @@ public abstract class Character extends ImageView implements Comparable<Characte
             this.defeated();
         }
     }
+
     public void takeHeal(int amount) {
-        this.health +=5;
+        this.health += 5;
     }
-    public abstract void takeTurn();
+
+    public abstract void takeTurn(Character target);
 
     public void attack(Character target) {
         target.takeDamage(this.attack);
     }
-    
+
     public void animate(Image[] animationImages, int currentFrame) {
         this.setImage(animationImages[currentFrame]);
     }
@@ -83,13 +91,14 @@ public abstract class Character extends ImageView implements Comparable<Characte
         animate(idleFrames, currentFrame);
     }
 
-
     public void increaseAttack(int amount) {
         this.attack += amount;
     }
+
     public void increaseDefense(int amount) {
         this.defense += amount;
     }
+
     public void increaseMaxHealth(int amount) {
         this.maxHealth += amount;
     }
@@ -98,57 +107,75 @@ public abstract class Character extends ImageView implements Comparable<Characte
     public String getName() {
         return name;
     }
+
     public void setName(String name) {
         this.name = name;
     }
+
     public int getLevel() {
         return level;
     }
+
     public void setLevel(int level) {
         this.level = level;
     }
+
     public int getAttack() {
         return attack;
     }
+
     public void setAttack(int atttack) {
         this.attack = atttack;
     }
+
     public int getDefense() {
         return defense;
     }
+
     public void setDefense(int defense) {
         this.defense = defense;
     }
+
     public int getHealth() {
         return health;
     }
+
     public void setHealth(int health) {
         this.health = health;
     }
+
     public int getMaxHealth() {
         return maxHealth;
     }
+
     public void setMaxHealth(int maxHealth) {
         this.maxHealth = maxHealth;
     }
+
     public int getSpeed() {
         return speed;
     }
+
     public void setSpeed(int speed) {
         this.speed = speed;
     }
+
     public void setAbilities(ArrayList<Ability> abilities) {
         this.abilities = abilities;
     }
+
     public ArrayList<Ability> getAbilities() {
         return abilities;
     }
+
     public void learnAbility(Ability newAbility) {
         this.abilities.add(newAbility);
     }
+
     public int getAbilityPoints() {
         return abilityPoints;
     }
+
     public void setAbilityPoints(int abilityPoints) {
         this.abilityPoints = abilityPoints;
     }
@@ -156,15 +183,19 @@ public abstract class Character extends ImageView implements Comparable<Characte
     public void setDefeated(boolean isDefeated) {
         this.isDefeated = isDefeated;
     }
+
     public boolean checkDefeat() {
         return isDefeated;
     }
+
     public Image[] getIdleFrames() {
         return idleFrames;
     }
+
     public void setIdleFrames(Image[] idleFrames) {
         this.idleFrames = idleFrames;
     }
+
     public void setCurrentAnimation(Image[] currentAnimation) {
         this.currentAnimation = currentAnimation;
     }

@@ -1,13 +1,15 @@
 package abilities;
+
 import passwords.Password;
 import characters.Character;
 import characters.Player;
 import java.util.Random;
 
-public class Phishing extends Ability { 
+public class Phishing extends Ability {
     public Phishing() {
         super();
     }
+
     @Override
     public void use(Character target) {
         Random random = new Random(System.nanoTime());

@@ -5,7 +5,9 @@ import characters.Character;
 public class FireWall extends Ability {
 
     public FireWall(int power) {
-        super("Fire Wall", "Use advanced security techniques to save yourself from invading hackers. Boosts your Attack and Defense.", power);
+        super("Fire Wall",
+                "Use advanced security techniques to save yourself from invading hackers. Boosts your Attack and Defense.",
+                power);
     }
 
     @Override
@@ -14,5 +16,5 @@ public class FireWall extends Ability {
         target.increaseDefense(power);
 
     }
-    
+
 }

@@ -16,31 +16,31 @@ import characters.Hacker;
 
 public class CharTest extends Application {
     Image[] boyIdleFrames = new Image[] {
-        new Image("BoySprites/Idle(1).png"),
-        new Image("BoySprites/Idle(2).png"),
-        new Image("BoySprites/Idle(3).png"),
-        new Image("BoySprites/Idle(4).png"),
-        new Image("BoySprites/Idle(5).png"),
-        new Image("BoySprites/Idle(6).png"),
-        new Image("BoySprites/Idle(7).png"),
-        new Image("BoySprites/Idle(8).png"),
-        new Image("BoySprites/Idle(9).png"),
-        new Image("BoySprites/Idle(10).png"),
-        new Image("BoySprites/Idle(11).png"),
-        new Image("BoySprites/Idle(12).png"),
-        new Image("BoySprites/Idle(13).png")
+            new Image("BoySprites/Idle(1).png"),
+            new Image("BoySprites/Idle(2).png"),
+            new Image("BoySprites/Idle(3).png"),
+            new Image("BoySprites/Idle(4).png"),
+            new Image("BoySprites/Idle(5).png"),
+            new Image("BoySprites/Idle(6).png"),
+            new Image("BoySprites/Idle(7).png"),
+            new Image("BoySprites/Idle(8).png"),
+            new Image("BoySprites/Idle(9).png"),
+            new Image("BoySprites/Idle(10).png"),
+            new Image("BoySprites/Idle(11).png"),
+            new Image("BoySprites/Idle(12).png"),
+            new Image("BoySprites/Idle(13).png")
     };
     Image[] hackerIdleFrames = new Image[] {
-        new Image("RobotSprites/Idle(1).png"),
-        new Image("RobotSprites/Idle(2).png"),
-        new Image("RobotSprites/Idle(3).png"),
-        new Image("RobotSprites/Idle(4).png"),
-        new Image("RobotSprites/Idle(5).png"),
-        new Image("RobotSprites/Idle(6).png"),
-        new Image("RobotSprites/Idle(7).png"),
-        new Image("RobotSprites/Idle(8).png"),
-        new Image("RobotSprites/Idle(9).png"),
-        new Image("RobotSprites/Idle(10).png")
+            new Image("RobotSprites/Idle(1).png"),
+            new Image("RobotSprites/Idle(2).png"),
+            new Image("RobotSprites/Idle(3).png"),
+            new Image("RobotSprites/Idle(4).png"),
+            new Image("RobotSprites/Idle(5).png"),
+            new Image("RobotSprites/Idle(6).png"),
+            new Image("RobotSprites/Idle(7).png"),
+            new Image("RobotSprites/Idle(8).png"),
+            new Image("RobotSprites/Idle(9).png"),
+            new Image("RobotSprites/Idle(10).png")
     };
 
     Player player = new Player(boyIdleFrames);
@@ -59,23 +59,24 @@ public class CharTest extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-    Pane root = new Pane();
-    HBox playerBox = new HBox();
-    playerBox.getChildren().addAll(player,hacker);
-    root.getChildren().add(playerBox);
-    Scene scene = new Scene(root);
-    primaryStage.setScene(scene);
+        Pane root = new Pane();
+        HBox playerBox = new HBox();
+        playerBox.getChildren().addAll(player, hacker);
+        root.getChildren().add(playerBox);
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
 
-    AnimationTimer timer = new AnimationTimer() {
-        @Override
-        public void handle(long timeStamp) {
-            update(timeStamp);
-        }
-    };
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long timeStamp) {
+                update(timeStamp);
+            }
+        };
 
-    timer.start();
-    primaryStage.show();
+        timer.start();
+        primaryStage.show();
     }
+
     public static void main(String[] args) {
         launch(args);
     }

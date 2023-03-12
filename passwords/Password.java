@@ -5,14 +5,16 @@ public class Password implements PasswordStrengthChecker {
 
     public Password() {
     }
+
     public Password(String value) {
         this.value = value;
     }
+
     public int checkPasswordStrength() {
         // total possible strength is 5
         int strength = 0;
-        boolean hasUpper =  false;
-        boolean hasDigit =  false;
+        boolean hasUpper = false;
+        boolean hasDigit = false;
         boolean hasSpecialChar = false;
         for (int i = 0; i < this.value.length(); i++) {
             char c = this.value.charAt(i);
@@ -40,6 +42,7 @@ public class Password implements PasswordStrengthChecker {
         }
         return strength;
     }
+
     public boolean verify(String passwordAttempt) {
         boolean isVerified;
         if (passwordAttempt == this.value) {
@@ -49,12 +52,15 @@ public class Password implements PasswordStrengthChecker {
         }
         return isVerified;
     }
+
     public void setValue(String value) {
         this.value = value;
     }
+
     public String getValue() {
         return value;
     }
+
     @Override
     public String toString() {
         return this.value;

@@ -1,4 +1,5 @@
 package characters;
+
 import javafx.scene.image.Image;
 import javafx.animation.FadeTransition;
 import javafx.util.Duration;
@@ -9,13 +10,17 @@ public class Hacker extends Character {
     public Hacker() {
         super();
     }
+
     public Hacker(Image[] frames) {
         super(frames);
         fadeTransition = new FadeTransition(Duration.seconds(3), this);
     }
-    public void takeTurn() {
-        // implement NPC logic.
+
+    @Override
+    public void takeTurn(Character player) {
+        this.attack(player);
     }
+
     public void defeated() {
         fadeTransition.setFromValue(1.0);
         fadeTransition.setToValue(0.0);

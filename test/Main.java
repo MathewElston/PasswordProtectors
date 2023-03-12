@@ -34,7 +34,8 @@ public class Main extends Application {
             popup.show(stage);
         });
 
-        // Create a StackPane to hold the button and set it as the root node of the Scene
+        // Create a StackPane to hold the button and set it as the root node of the
+        // Scene
         StackPane root = new StackPane(menuButton);
         Scene scene = new Scene(root, 200, 200);
         stage.setScene(scene);
