@@ -1,6 +1,7 @@
 package passwords;
 
 import java.io.*;
+import java.util.*;
 
 public class Password implements PasswordStrengthChecker, Serializable {
     private String value;
@@ -68,27 +69,31 @@ public class Password implements PasswordStrengthChecker, Serializable {
         return this.value;
     }
 
-    public void save(String file) {
+    public static void save(String file, ArrayList<Password> passwords) {
         try {
-            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
-            out.writeObject(this);
+            FileOutputStream fileOut = new FileOutputStream(file);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(passwords);
             out.close();
-        } catch (Exception e) {
+            fileOut.close();
+        } catch (IOException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
 
-    public Password load(String file) {
+    public static ArrayList<Password> load(String file) {
         try {
-            FileInputStream fileIn = new FileInputStream(file);
-            ObjectInputStream objectIn = new ObjectInputStream(fileIn);
-            Object obj = objectIn.readObject();
+            ObjectInputStream objectIn = new ObjectInputStream(new FileInputStream(file));
+            ArrayList<Password> passwords = (ArrayList<Password>) objectIn.readObject();
             objectIn.close();
-            return (Password) obj;
+            for (Password password : passwords) {
+                System.out.println("Loaded: " + password + "\n");
+            }
+            return passwords;
         } catch (Exception e) {
-            System.out.println("Error:" + e.getMessage());
+            System.out.println("Error: " + e.getMessage());
             return null;
         }
-
     }
+
 }

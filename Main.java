@@ -385,7 +385,22 @@ public class Main extends Application {
         });
         // save/load buttons
         saveEquipButton.setOnAction(event -> {
-            ((Player) player).getEquippedPassword().save("myVault.ser");
+            Password.save("myVault.ser", ((Player) player).getPasswordManager());
+        });
+
+        loadEquipButton.setOnAction(event -> {
+            // Load passwords from file
+            ArrayList<Password> loadedPasswords = Password.load("myVault.ser");
+            if (loadedPasswords != null) {
+                for (Password password : loadedPasswords) {
+                    // Add password to player's password manager
+                    ((Player) player).addPassword(password.getValue());
+                    // Add password to ListView
+                    passwordListView.getItems().add(
+                            ((Player) player).getPasswordManager()
+                                    .get(((Player) player).getPasswordManager().size() - 1));
+                }
+            }
         });
         // add main container children to root
         VBox mainContainer = new VBox();
