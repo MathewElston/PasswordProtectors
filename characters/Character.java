@@ -4,9 +4,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import abilities.Ability;
 import java.util.ArrayList;
+import java.util.Random;
 
-public abstract class Character extends ImageView implements Comparable<Character> {
-    String name;
+public abstract class Character extends ImageView {
+    private String name;
     private int level;
     private int attack;
     private int defense;
@@ -15,6 +16,9 @@ public abstract class Character extends ImageView implements Comparable<Characte
     private int maxHealth;
     private int abilityPoints;
     private boolean isDefeated = false;
+    private int experience = 0;
+    private int requiredExp = 250;
+    private int experienceWorth;
     ArrayList<Ability> abilities = new ArrayList<>();
     private Image[] idleFrames;
     private Image[] attackFrames;
@@ -34,6 +38,7 @@ public abstract class Character extends ImageView implements Comparable<Characte
         this.speed = 3;
         this.maxHealth = 200;
         this.health = this.maxHealth;
+        this.experienceWorth += this.level * 100;
 
     }
 
@@ -49,12 +54,6 @@ public abstract class Character extends ImageView implements Comparable<Characte
         this.health = maxHealth;
     }
 
-    // compare speeds to determine the turn order
-    @Override
-    public int compareTo(Character other) {
-        return Integer.compare(this.speed, other.speed);
-    }
-
     public abstract void defeated();
 
     // useAbility()
@@ -68,6 +67,28 @@ public abstract class Character extends ImageView implements Comparable<Characte
         }
     }
 
+    public void gainExp(int amount) {
+        this.experience += amount;
+        if (this.experience >= this.requiredExp) {
+            this.levelUp();
+        }
+    }
+
+    public void levelUp() {
+        this.level += 1;
+        this.experience = 0;
+        this.requiredExp += 50;
+        this.experienceWorth += 50;
+        this.attack += 5;
+        this.defense += 2;
+        this.speed += 2;
+        this.maxHealth += 50;
+        this.health += 50;
+        System.out.println(this.name + " leveled up to " + this.level);
+        System.out.println(this);
+
+    }
+
     public void takeHeal(int amount) {
         this.health += 5;
     }
@@ -75,7 +96,17 @@ public abstract class Character extends ImageView implements Comparable<Characte
     public abstract void takeTurn(Character target);
 
     public void attack(Character target) {
-        target.takeDamage(this.attack);
+        Random random = new Random(System.currentTimeMillis());
+        // 80% to 100% of damage
+        double damageModifier = 0.8 + (0.2 * random.nextDouble());
+        int damage = (int) (this.attack * damageModifier) - target.getDefense();
+
+        target.takeDamage(damage);
+
+        if (target.checkDefeat()) {
+            System.out.println(this.name + " gained: " + target.getExperienceWorth() + " exp!");
+            this.gainExp(target.getExperienceWorth());
+        }
     }
 
     public void animate(Image[] animationImages, int currentFrame) {
@@ -164,6 +195,14 @@ public abstract class Character extends ImageView implements Comparable<Characte
         this.abilities = abilities;
     }
 
+    public int getExperienceWorth() {
+        return experienceWorth;
+    }
+
+    public void setExperienceWorth(int experienceWorth) {
+        this.experienceWorth = experienceWorth;
+    }
+
     public ArrayList<Ability> getAbilities() {
         return abilities;
     }
@@ -198,5 +237,18 @@ public abstract class Character extends ImageView implements Comparable<Characte
 
     public void setCurrentAnimation(Image[] currentAnimation) {
         this.currentAnimation = currentAnimation;
+    }
+
+    @Override
+    public String toString() {
+        return "Character :" +
+                "\nName = '" + name + '\'' +
+                "\nLevel = " + level +
+                "\nAttack = " + attack +
+                "\nDefense = " + defense +
+                "\nSpeed = " + speed +
+                "\nHealth = " + health +
+                "\nMaxHealth = " + maxHealth +
+                "\nAbilityPoints = " + abilityPoints;
     }
 }

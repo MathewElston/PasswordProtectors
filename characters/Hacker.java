@@ -22,8 +22,11 @@ public class Hacker extends Character {
     }
 
     public void defeated() {
-        fadeTransition.setFromValue(1.0);
-        fadeTransition.setToValue(0.0);
-        fadeTransition.play();
+        if (this.isVisible()) {
+            fadeTransition.setFromValue(1.0);
+            fadeTransition.setToValue(0.0);
+            fadeTransition.play();
+            this.setVisible(false);
+        }
     }
 }

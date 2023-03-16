@@ -99,18 +99,26 @@ public class Main extends Application {
     Button updatePasswordButton = new Button("Update Password");
     StackPane root = new StackPane();
 
+    // Ability window
+    Popup abilityPopup = new Popup();
+    StackPane abilityPopupRoot = new StackPane();
+    VBox abilityPopupMainContainer = new VBox();
+    ListView abilityList = new ListView<>();
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         player.autosize();
         player.setPreserveRatio(true);
         player.setName("Player");
         player.setSpeed(5);
+        player.setAttack(10);
         attackButton.setDisable(true);
         abilityButton.setDisable(true);
 
         hacker.autosize();
         hacker.setPreserveRatio(true);
         hacker.setName("HackBot");
+        hacker.setExperienceWorth(500);
 
         VBox buttonContainer = new VBox();
         HBox topButtons = new HBox(attackButton, abilityButton);
@@ -320,6 +328,11 @@ public class Main extends Application {
         passwordMenuRoot.getChildren().add(passwordManagerMainContainer);
         popupPasswordMenu.getContent().add(passwordMenuRoot);
 
+        // Ability Popup Window
+        abilityList.getItems().addAll(player.getAbilities());
+        abilityPopupMainContainer.getChildren().addAll(abilityList);
+        abilityPopupRoot.getChildren().add(abilityPopupMainContainer);
+
         /*
          * passwordManager Button events
          */
@@ -427,12 +440,16 @@ public class Main extends Application {
             playerProgressBar.setProgress(0);
             turnQueue.poll();
             if (hacker.checkDefeat()) {
-                hacker.defeated();
                 dialogueLabel.setText(hacker.getName() + " has been defeated!");
                 fadeTransition.setFromValue(1.0);
                 fadeTransition.setToValue(0.0);
                 fadeTransition.play();
             }
+        });
+
+        // Ability Button
+        abilityButton.setOnAction(event -> {
+            abilityPopup.show(primaryStage);
         });
 
         // set the main Scene;
@@ -488,8 +505,12 @@ public class Main extends Application {
     }
 
     public void updateSpeed() {
-        updatePlayerProgress();
-        updateEnemyProgress();
+        if (!player.checkDefeat()) {
+            updatePlayerProgress();
+        }
+        if (!hacker.checkDefeat()) {
+            updateEnemyProgress();
+        }
     }
 
     public void updateUI() {
@@ -527,9 +548,13 @@ public class Main extends Application {
     public void update(long timeStamp) {
         long now = System.currentTimeMillis();
         if (now - previousFrame > targetMS) {
-            player.update();
-            hacker.update();
-            hacker.setScaleX(-1);
+            if (!player.checkDefeat()) {
+                player.update();
+            }
+            if (!hacker.checkDefeat()) {
+                hacker.update();
+                hacker.setScaleX(-1);
+            }
             updateUI();
             updateSpeed();
             updateGameState();

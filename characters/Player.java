@@ -1,14 +1,15 @@
 package characters;
 
 import javafx.scene.image.Image;
-import passwords.Password;
 import java.util.ArrayList;
+
+import passwords.Password;
+import abilities.*;
+import java.util.Random;
 
 public class Player extends Character {
     private ArrayList<Password> passwordManager = new ArrayList<>();
     private Password equippedPassword = new Password("Default");
-    private int experience = 0;
-    private int requiredExp = 250;
 
     public Player() {
         super();
@@ -24,19 +25,37 @@ public class Player extends Character {
 
     }
 
+    @Override
+    public void levelUp() {
+        super.levelUp();
+        switch (this.getLevel()) {
+            case 2:
+                this.learnAbility(new FireWall(2));
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
     public void defeated() {
         // lose game
     }
 
     @Override
     public void attack(Character target) {
-        super.attack(target);
-    }
+        int passwordStrength = this.getEquippedPassword().checkPasswordStrength();
+        double passwordModifier = passwordStrength / 5.0;
+        Random random = new Random(System.currentTimeMillis());
+        // 80% to 100% of damage
+        double damageModifier = 0.8 + (0.2 * random.nextDouble());
+        int damage = (int) (this.getAttack() * passwordModifier * damageModifier - target.getDefense());
+        target.takeDamage(damage);
 
-    public void levelUp() {
-        this.setLevel(this.getLevel() + 1);
-        this.experience = 0;
-        this.requiredExp += 50;
+        if (target.checkDefeat()) {
+            System.out.println(this.getName() + " gained: " + target.getExperienceWorth() + " exp!");
+            this.gainExp(target.getExperienceWorth());
+        }
     }
 
     public void addPassword(String password) {
