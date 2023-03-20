@@ -1,5 +1,6 @@
 package layout;
 
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 
@@ -8,6 +9,9 @@ public class PlayerButtons extends GridPane {
     private Button abillityButton = new Button("Ability");
     private Button infoButton = new Button("Info");
     private Button passwordButton = new Button("Passwords");
+    private Node[] nodeList = {
+        attackButton, abillityButton, infoButton, passwordButton
+    };
 
     public PlayerButtons() {
         super();
@@ -19,9 +23,24 @@ public class PlayerButtons extends GridPane {
         this.add(abillityButton, 1, 0);
         this.add(infoButton, 0, 1);
         this.add(passwordButton, 1, 1);
-        this.setPrefSize(20, 20);
         this.setHgap(10);
-        this.setVgap(5);
+        this.setVgap(10);
+    }
+
+    public Button getPasswordButton() {
+        return passwordButton;
+    }
+
+    public void setPasswordButton(Button passwordButton) {
+        this.passwordButton = passwordButton;
+    }
+
+    public Node[] getButtonList() {
+        return nodeList;
+    }
+
+    public void setButtonList(Node[] buttonList) {
+        this.nodeList = buttonList;
     }
 
     public void setAttackButton(Button attackButton) {

@@ -6,7 +6,7 @@ import characters.Player;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import layout.BattleFields;
+import layout.BattleHud;
 
 public class Main extends Application {
 
@@ -14,12 +14,11 @@ public class Main extends Application {
     public void start(Stage stage) {
         Character player = new Player();
         Character enemy = new Hacker();
-        BattleFields battle = new BattleFields(player, enemy);
-        Scene scene = new Scene(battle);
+        BattleHud box = new BattleHud(player, enemy);
+        Scene scene = new Scene(box);
 
         stage.setScene(scene);
         stage.show();
-        
 
     }
 
