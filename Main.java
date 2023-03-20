@@ -407,24 +407,24 @@ public class Main extends Application {
             }
         });
 
-              // Ability Popup Window
-              Popup abilityPopup = new Popup();
-              StackPane abilityPopupRoot = new StackPane();
-              VBox abilityPopupMainContainer = new VBox();
-              ListView abilityList = new ListView<>();
-              Button abilityUseButton = new Button ("Use");
-              Button abilityCloseButton = new Button("Close");
-              abilityPopupRoot.setStyle("-fx-background-color: white;");
-              abilityList.getItems().addAll(player.getAbilities());
-              abilityPopupMainContainer.getChildren().addAll(abilityList, abilityUseButton, abilityCloseButton);
-              abilityPopupMainContainer.setAlignment(Pos.CENTER);
-              abilityPopupMainContainer.setSpacing(10);
-              abilityPopupRoot.getChildren().addAll(abilityPopupMainContainer);
-              abilityPopup.getContent().add(abilityPopupRoot);
-      
-              abilityCloseButton.setOnAction(event -> {
-                  abilityPopup.hide();
-              });
+        // Ability Popup Window
+        Popup abilityPopup = new Popup();
+        StackPane abilityPopupRoot = new StackPane();
+        VBox abilityPopupMainContainer = new VBox();
+        ListView abilityList = new ListView<>();
+        Button abilityUseButton = new Button("Use");
+        Button abilityCloseButton = new Button("Close");
+        abilityPopupRoot.setStyle("-fx-background-color: white;");
+        abilityList.getItems().addAll(player.getAbilities());
+        abilityPopupMainContainer.getChildren().addAll(abilityList, abilityUseButton, abilityCloseButton);
+        abilityPopupMainContainer.setAlignment(Pos.CENTER);
+        abilityPopupMainContainer.setSpacing(10);
+        abilityPopupRoot.getChildren().addAll(abilityPopupMainContainer);
+        abilityPopup.getContent().add(abilityPopupRoot);
+
+        abilityCloseButton.setOnAction(event -> {
+            abilityPopup.hide();
+        });
 
         // Info Scene
         VBox infoContainer = new VBox();
@@ -450,7 +450,6 @@ public class Main extends Application {
         backButton.setOnAction(event -> {
             primaryStage.setScene(main);
         });
-
 
         // add main container children to root
         VBox mainContainer = new VBox();

@@ -16,23 +16,28 @@ public class BattleHud extends HBox {
             playerButtons.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
             PasswordStrengthBox strengthBox = new PasswordStrengthBox(player);
             BattleFields fields = new BattleFields(player, enemy);
+            fields.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
             for (Node field : fields.getHeaderFields()) {
                 if (field instanceof Label) {
                     field.setStyle("-fx-text-fill: white;");
                 }
             }
-            for (Node field : fields.getPlayerFields()) {
-                if (field instanceof Label) {
-                    field.setStyle("-fx-text-fill: white;");
+            for (Node node : fields.getPlayerFields()) {
+                if (node instanceof Label) {
+                    node.setStyle("-fx-text-fill: white;");
                 }
             }
-            for (Node field : fields.getEnemyFields()) {
-                if (field instanceof Label) {
-                    field.setStyle("-fx-text-fill: white;");
+            for (Node node : fields.getEnemyFields()) {
+                if (node instanceof Label) {
+                    node.setStyle("-fx-text-fill: white;");
                 }
             }
 
-            this.setPadding(new Insets(5));
+            for (Node node : strengthBox.getNodeList()) {
+                if (node instanceof Label) {
+                    node.setStyle("-fx-text-fill: white;");
+                }
+            }
             this.setSpacing(10);
             this.getChildren().addAll(playerButtons, strengthBox, fields);
             this.setStyle("-fx-background-color:rgb(25,45,200,0.8);");

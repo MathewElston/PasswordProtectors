@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public abstract class Character extends ImageView {
+    private Image[] idleFrames;
+    private Image[] attackFrames;
+    private Image[] currentAnimation;
     private String name;
     private int level;
     private int attack;
@@ -21,18 +24,10 @@ public abstract class Character extends ImageView {
     private int requiredExp = 250;
     private int experienceWorth;
     ArrayList<Ability> abilities = new ArrayList<>();
-    private Image[] idleFrames;
-    private Image[] attackFrames;
-    private Image[] currentAnimation;
     int currentFrame = 0;
 
     public Character() {
         super();
-    }
-
-    public Character(Image[] frames) {
-        super(frames[0]);
-        this.idleFrames = frames;
         this.level = 1;
         this.attack = 5;
         this.defense = 2;
@@ -40,12 +35,10 @@ public abstract class Character extends ImageView {
         this.maxHealth = 200;
         this.health = this.maxHealth;
         this.experienceWorth += this.level * 100;
-
     }
 
-    public Character(Image[] frames, String name, int level, int attack, int defense, int speed, int maxHealth) {
-        super(frames[0]);
-        this.idleFrames = frames;
+    public Character(String name, int level, int attack, int defense, int speed, int maxHealth) {
+        super();
         this.name = name;
         this.level = level;
         this.attack = attack;

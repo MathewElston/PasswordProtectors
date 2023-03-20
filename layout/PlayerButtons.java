@@ -74,4 +74,13 @@ public class PlayerButtons extends GridPane {
     public Button getUpdatePassword() {
         return passwordButton;
     }
+
+    public Node[] getNodeList() {
+        return nodeList;
+    }
+
+    public void setNodeList(Node[] nodeList) {
+        this.nodeList = nodeList;
+    }
+    
 }

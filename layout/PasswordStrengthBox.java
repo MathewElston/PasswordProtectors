@@ -63,12 +63,14 @@ public class PasswordStrengthBox extends VBox {
         this.passwordPower = passwordPower;
     }
 
-    public Node[] getLabelList() {
+    public Node[] getNodeList() {
         return nodeList;
     }
 
-    public void setLabelList(Node[] labelList) {
-        this.nodeList = labelList;
+    public void setNodeList(Node[] nodeList) {
+        this.nodeList = nodeList;
     }
+
+
 
 }

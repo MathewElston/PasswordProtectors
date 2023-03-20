@@ -1,16 +1,21 @@
 package layout;
 
-import javafx.scene.control.*;
-import javafx.scene.text.*;
-import javafx.scene.layout.*;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 
 public class StartMenu extends VBox {
     private Text titleHeading = new Text("Password\nProtectors");
     private Button startButton = new Button("Start");
     private TextFlow textFlow = new TextFlow(titleHeading);
+    private Node[] nodeList = {
+            titleHeading, startButton
+    };
 
     public StartMenu() {
         super();
@@ -48,6 +53,14 @@ public class StartMenu extends VBox {
 
     public void setStartButton(Button startButton) {
         this.startButton = startButton;
+    }
+
+    public Node[] getNodeList() {
+        return nodeList;
+    }
+
+    public void setNodeList(Node[] nodeList) {
+        this.nodeList = nodeList;
     }
 
 }

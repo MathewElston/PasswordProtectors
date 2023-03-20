@@ -8,16 +8,29 @@ import abilities.*;
 import java.util.Random;
 
 public class Player extends Character {
+    private Image[] boyIdle = new Image[] {
+            new Image("BoySprites/Idle(1).png"),
+            new Image("BoySprites/Idle(2).png"),
+            new Image("BoySprites/Idle(3).png"),
+            new Image("BoySprites/Idle(4).png"),
+            new Image("BoySprites/Idle(5).png"),
+            new Image("BoySprites/Idle(6).png"),
+            new Image("BoySprites/Idle(7).png"),
+            new Image("BoySprites/Idle(8).png"),
+            new Image("BoySprites/Idle(9).png"),
+            new Image("BoySprites/Idle(10).png"),
+            new Image("BoySprites/Idle(11).png"),
+            new Image("BoySprites/Idle(12).png"),
+            new Image("BoySprites/Idle(13).png")
+    };
+
     private ArrayList<Password> passwordManager = new ArrayList<>();
     private Password equippedPassword = new Password("Default");
 
     public Player() {
         super();
-
-    }
-
-    public Player(Image[] frames) {
-        super(frames);
+        this.setIdleFrames(boyIdle);
+        this.setImage(this.getIdleFrames()[0]);
     }
 
     public void takeTurn(Character target) {
