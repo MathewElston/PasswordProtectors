@@ -15,6 +15,7 @@ public abstract class Character extends ImageView {
     private int health;
     private int maxHealth;
     private int abilityPoints;
+    private int maxAbilityPoints;
     private boolean isDefeated = false;
     private int experience = 0;
     private int requiredExp = 250;
@@ -217,6 +218,14 @@ public abstract class Character extends ImageView {
 
     public void setAbilityPoints(int abilityPoints) {
         this.abilityPoints = abilityPoints;
+    }
+
+    public int getMaxAbilityPoints() {
+        return maxAbilityPoints;
+    }
+
+    public void setMaxAbilityPoints(int maxAbilityPoints) {
+        this.maxAbilityPoints = maxAbilityPoints;
     }
 
     public void setDefeated(boolean isDefeated) {
