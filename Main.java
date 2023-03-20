@@ -22,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -98,12 +99,7 @@ public class Main extends Application {
     Button infoButton = new Button("Info");
     Button updatePasswordButton = new Button("Update Password");
     StackPane root = new StackPane();
-
-    // Ability window
-    Popup abilityPopup = new Popup();
-    StackPane abilityPopupRoot = new StackPane();
-    VBox abilityPopupMainContainer = new VBox();
-    ListView abilityList = new ListView<>();
+    Scene main = new Scene(root);
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -328,11 +324,6 @@ public class Main extends Application {
         passwordMenuRoot.getChildren().add(passwordManagerMainContainer);
         popupPasswordMenu.getContent().add(passwordMenuRoot);
 
-        // Ability Popup Window
-        abilityList.getItems().addAll(player.getAbilities());
-        abilityPopupMainContainer.getChildren().addAll(abilityList);
-        abilityPopupRoot.getChildren().add(abilityPopupMainContainer);
-
         /*
          * passwordManager Button events
          */
@@ -415,6 +406,52 @@ public class Main extends Application {
                 }
             }
         });
+
+              // Ability Popup Window
+              Popup abilityPopup = new Popup();
+              StackPane abilityPopupRoot = new StackPane();
+              VBox abilityPopupMainContainer = new VBox();
+              ListView abilityList = new ListView<>();
+              Button abilityUseButton = new Button ("Use");
+              Button abilityCloseButton = new Button("Close");
+              abilityPopupRoot.setStyle("-fx-background-color: white;");
+              abilityList.getItems().addAll(player.getAbilities());
+              abilityPopupMainContainer.getChildren().addAll(abilityList, abilityUseButton, abilityCloseButton);
+              abilityPopupMainContainer.setAlignment(Pos.CENTER);
+              abilityPopupMainContainer.setSpacing(10);
+              abilityPopupRoot.getChildren().addAll(abilityPopupMainContainer);
+              abilityPopup.getContent().add(abilityPopupRoot);
+      
+              abilityCloseButton.setOnAction(event -> {
+                  abilityPopup.hide();
+              });
+
+        // Info Scene
+        VBox infoContainer = new VBox();
+        String headerString = "Welcome to Password Protectors!";
+        String stringBody = "Your goal is to defeat the evil hackbots who are trying to steal your passwords. Create new strong passwords to keep damaging your opponent! Level up and get new abilities to defeat the the super mega hackbot that's creating an endless supply of hackbots. A strong password is at least 12 characters long and includes a mix of uppercase and lowercase letters, numbers, and special characters like !,@,#. Your password strength will determine how much damage you can do to the hackbots. Do you have what it takes to save world from compromised passwords?";
+        TextFlow headerFlow = new TextFlow();
+        TextFlow textFlow = new TextFlow();
+        Text header = new Text(headerString);
+        header.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
+        headerFlow.getChildren().add(header);
+        headerFlow.setLineSpacing(10);
+        headerFlow.setPadding(new Insets(10));
+        Text info = new Text(stringBody);
+        Button backButton = new Button("Back");
+        textFlow.getChildren().addAll(info);
+        textFlow.setLineSpacing(10);
+        textFlow.setPadding(new Insets(10));
+        infoContainer.getChildren().addAll(headerFlow, textFlow, backButton);
+        infoContainer.setAlignment(Pos.CENTER);
+        infoContainer.setSpacing(10);
+        Scene infoScene = new Scene(infoContainer, 400, 400);
+
+        backButton.setOnAction(event -> {
+            primaryStage.setScene(main);
+        });
+
+
         // add main container children to root
         VBox mainContainer = new VBox();
         mainContainer.getChildren().addAll(dialogueContainer, spriteContainer, bottomContainer);
@@ -452,8 +489,12 @@ public class Main extends Application {
             abilityPopup.show(primaryStage);
         });
 
+        // Info Button
+        infoButton.setOnAction(event -> {
+            primaryStage.setScene(infoScene);
+        });
+
         // set the main Scene;
-        Scene main = new Scene(root);
         primaryStage.setScene(main);
         timer.start();
         primaryStage.show();

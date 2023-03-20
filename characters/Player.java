@@ -31,6 +31,7 @@ public class Player extends Character {
         switch (this.getLevel()) {
             case 2:
                 this.learnAbility(new FireWall(2));
+                System.out.println(this.getName() + " has learned FireWall!");
                 break;
             default:
                 break;

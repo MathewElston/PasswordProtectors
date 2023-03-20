@@ -1,46 +1,45 @@
 package test;
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import layout.StartMenu;
+import javafx.scene.paint.Color;
 import javafx.stage.Popup;
+
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundSize;
+import javafx.scene.image.Image;
+
+import scenes.StartMenuScene;
 
 public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        // Create some controls to add to the menu
 
-        Label label1 = new Label("Enter your name:");
-        TextField textField1 = new TextField();
-        Button button1 = new Button("OK");
+        try {
+            StartMenuScene startScene = new StartMenuScene(800, 800);
 
-        // Create a VBox to hold the controls
-        VBox menuContent = new VBox(label1, textField1, button1);
-        menuContent.setStyle("-fx-background-color: white; -fx-padding: 10px; -fx-spacing: 5px;");
+            stage.setScene(startScene);
+            stage.show();
+            startScene.getStartMenu().getStartButton().setOnAction(event -> {
+                System.out.println("Clicked!");
 
-        // Create a Popup and set its content to the VBox
-        Popup popup = new Popup();
-        popup.getContent().add(menuContent);
+            });
 
-        // Create a button to show the menu
-        Button menuButton = new Button("Menu");
-        menuButton.setOnAction(event -> {
-            popup.show(stage);
-        });
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
-        // Create a StackPane to hold the button and set it as the root node of the
-        // Scene
-        StackPane root = new StackPane(menuButton);
-        Scene scene = new Scene(root, 200, 200);
-        stage.setScene(scene);
-        stage.setTitle("Overlay Menu Example");
-        stage.show();
     }
 
     public static void main(String[] args) {
