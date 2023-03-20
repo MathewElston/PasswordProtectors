@@ -26,20 +26,6 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) {
 
-        try {
-            StartMenuScene startScene = new StartMenuScene(800, 800);
-
-            stage.setScene(startScene);
-            stage.show();
-            startScene.getStartMenu().getStartButton().setOnAction(event -> {
-                System.out.println("Clicked!");
-
-            });
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-
     }
 
     public static void main(String[] args) {

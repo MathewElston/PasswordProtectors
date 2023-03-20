@@ -3,10 +3,6 @@ package layout;
 import javafx.scene.control.*;
 import javafx.scene.text.*;
 import javafx.scene.layout.*;
-import characters.Character;
-import characters.Player;
-import characters.Hacker;
-import javafx.scene.layout.StackPane;
 import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
@@ -17,6 +13,7 @@ public class StartMenu extends VBox {
     private TextFlow textFlow = new TextFlow(titleHeading);
 
     public StartMenu() {
+        super();
         this.getChildren().addAll(textFlow, startButton);
         this.getTextFlow().setTextAlignment(TextAlignment.CENTER);
         this.getTitleHeading().setFill(Color.rgb(255, 200, 0));
@@ -26,6 +23,7 @@ public class StartMenu extends VBox {
         this.getStartButton().setStyle("-fx-text-fill: rgb(0, 170, 255);");
         this.setAlignment(Pos.TOP_CENTER);
         this.setStyle("-fx-background-image: url(/assets/Title_Screen.jpg); -fx-background-size: cover;");
+
     }
 
     public TextFlow getTextFlow() {
