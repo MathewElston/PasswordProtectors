@@ -73,8 +73,8 @@ public class Main extends Application {
     };
     // background image
     Image backgroundImage = new Image("cyberpunk_background.png");
-    Character player = new Player(boyIdleFrames);
-    Character hacker = new Hacker(hackerIdleFrames);
+    Character player = new Player();
+    Character hacker = new Hacker();
 
     // main window control items
     Label nameLabel = new Label("Name");

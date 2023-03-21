@@ -5,9 +5,10 @@ import characters.Hacker;
 import characters.Player;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import layout.BattleScreen;
 import layout.BattleSprites;
+import scenes.BattleScene;
 
 public class Main extends Application {
 
@@ -17,10 +18,11 @@ public class Main extends Application {
         player.setName("Player");
         Character enemy = new Hacker();
         enemy.setName("Enemy");
-        BattleSprites box = new BattleSprites(player, enemy);
-        Scene scene = new Scene(box);
 
-        stage.setScene(scene);
+        BattleScene battleScene = new BattleScene(player, enemy);
+
+        battleScene.getBattleScreen().getHud().getFields().getEnemyFields();
+        stage.setScene(battleScene);
         stage.show();
 
     }
