@@ -10,10 +10,10 @@ import javafx.scene.layout.HBox;
 public class BattleHud extends HBox {
     private BattleFields fields;
     private PasswordStrengthBox strengthBox;
+    private PlayerButtons playerButtons = new PlayerButtons();
 
     public BattleHud(Character player, Character enemy) {
         if (player instanceof Player) {
-            PlayerButtons playerButtons = new PlayerButtons();
             playerButtons.setStyle("-fx-border-color: black; -fx-border-width: 1px;");
             strengthBox = new PasswordStrengthBox(player);
             fields = new BattleFields(player, enemy);
@@ -52,8 +52,8 @@ public class BattleHud extends HBox {
         return fields;
     }
 
-    public void setFieldsRef(BattleFields fieldsRef) {
-        this.fields = fieldsRef;
+    public void setFieldsRef(BattleFields fields) {
+        this.fields = fields;
     }
 
     public PasswordStrengthBox getStrengthBox() {
@@ -63,5 +63,23 @@ public class BattleHud extends HBox {
     public void setStrengthBoxRef(PasswordStrengthBox strengthBoxRef) {
         this.strengthBox = strengthBoxRef;
     }
+
+    public void setFields(BattleFields fields) {
+        this.fields = fields;
+    }
+
+    public void setStrengthBox(PasswordStrengthBox strengthBox) {
+        this.strengthBox = strengthBox;
+    }
+
+    public PlayerButtons getPlayerButtons() {
+        return playerButtons;
+    }
+
+    public void setPlayerButtons(PlayerButtons playerButtons) {
+        this.playerButtons = playerButtons;
+    }
+
+    
 
 }

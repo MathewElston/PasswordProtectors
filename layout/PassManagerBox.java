@@ -30,4 +30,36 @@ public class PassManagerBox extends Pane {
     public void hide() {
         this.setVisible(false);
     }
+
+    public PassPhraseList getPassPhraseList() {
+        return passPhraseList;
+    }
+
+    public void setPassPhraseList(PassPhraseList passPhraseList) {
+        this.passPhraseList = passPhraseList;
+    }
+
+    public PasswordManagerButtons getPasswordManagerButtons() {
+        return passwordManagerButtons;
+    }
+
+    public void setPasswordManagerButtons(PasswordManagerButtons passwordManagerButtons) {
+        this.passwordManagerButtons = passwordManagerButtons;
+    }
+
+    public Popup getPopup() {
+        return popup;
+    }
+
+    public void setPopup(Popup popup) {
+        this.popup = popup;
+    }
+
+    public VBox getContainer() {
+        return container;
+    }
+
+    public void setContainer(VBox container) {
+        this.container = container;
+    }
 }

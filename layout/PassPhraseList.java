@@ -93,4 +93,124 @@ public class PassPhraseList extends HBox {
                 }
 
         }
+
+        public VBox getWordPhraseBox() {
+                return wordPhraseBox;
+        }
+
+        public void setWordPhraseBox(VBox wordPhraseBox) {
+                this.wordPhraseBox = wordPhraseBox;
+        }
+
+        public Label getWordPhraseLabel() {
+                return wordPhraseLabel;
+        }
+
+        public void setWordPhraseLabel(Label wordPhraseLabel) {
+                this.wordPhraseLabel = wordPhraseLabel;
+        }
+
+        public ObservableList<String> getWordPhraseList() {
+                return wordPhraseList;
+        }
+
+        public void setWordPhraseList(ObservableList<String> wordPhraseList) {
+                this.wordPhraseList = wordPhraseList;
+        }
+
+        public ListView<String> getWordPhraseListView() {
+                return wordPhraseListView;
+        }
+
+        public void setWordPhraseListView(ListView<String> wordPhraseListView) {
+                this.wordPhraseListView = wordPhraseListView;
+        }
+
+        public VBox getSpecialCharPhraseBox() {
+                return specialCharPhraseBox;
+        }
+
+        public void setSpecialCharPhraseBox(VBox specialCharPhraseBox) {
+                this.specialCharPhraseBox = specialCharPhraseBox;
+        }
+
+        public Label getSpecialCharPhraseLabel() {
+                return specialCharPhraseLabel;
+        }
+
+        public void setSpecialCharPhraseLabel(Label specialCharPhraseLabel) {
+                this.specialCharPhraseLabel = specialCharPhraseLabel;
+        }
+
+        public ObservableList<String> getSpecialCharPhraseList() {
+                return specialCharPhraseList;
+        }
+
+        public void setSpecialCharPhraseList(ObservableList<String> specialCharPhraseList) {
+                this.specialCharPhraseList = specialCharPhraseList;
+        }
+
+        public ListView<String> getSpecialCharPhraseListView() {
+                return specialCharPhraseListView;
+        }
+
+        public void setSpecialCharPhraseListView(ListView<String> specialCharPhraseListView) {
+                this.specialCharPhraseListView = specialCharPhraseListView;
+        }
+
+        public VBox getDigitPhraseBox() {
+                return digitPhraseBox;
+        }
+
+        public void setDigitPhraseBox(VBox digitPhraseBox) {
+                this.digitPhraseBox = digitPhraseBox;
+        }
+
+        public Label getDigitPhraseLabel() {
+                return digitPhraseLabel;
+        }
+
+        public void setDigitPhraseLabel(Label digitPhraseLabel) {
+                this.digitPhraseLabel = digitPhraseLabel;
+        }
+
+        public ObservableList<Integer> getDigitPhraseList() {
+                return digitPhraseList;
+        }
+
+        public void setDigitPhraseList(ObservableList<Integer> digitPhraseList) {
+                this.digitPhraseList = digitPhraseList;
+        }
+
+        public ListView<Integer> getDigitPhraseListView() {
+                return digitPhraseListView;
+        }
+
+        public void setDigitPhraseListView(ListView<Integer> digitPhraseListView) {
+                this.digitPhraseListView = digitPhraseListView;
+        }
+
+        public VBox getPasswordBox() {
+                return passwordBox;
+        }
+
+        public void setPasswordBox(VBox passwordBox) {
+                this.passwordBox = passwordBox;
+        }
+
+        public Label getPasswordLabel() {
+                return passwordLabel;
+        }
+
+        public void setPasswordLabel(Label passwordLabel) {
+                this.passwordLabel = passwordLabel;
+        }
+
+        public ListView<Password> getPasswordListView() {
+                return passwordListView;
+        }
+
+        public void setPasswordListView(ListView<Password> passwordListView) {
+                this.passwordListView = passwordListView;
+        }
 }

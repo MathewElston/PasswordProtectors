@@ -28,4 +28,44 @@ public class InfoBox extends VBox {
         this.setAlignment(Pos.CENTER);
         this.setSpacing(10);
     }
+
+    public String getHeaderString() {
+        return headerString;
+    }
+
+    public void setHeaderString(String headerString) {
+        this.headerString = headerString;
+    }
+
+    public String getStringBody() {
+        return stringBody;
+    }
+
+    public void setStringBody(String stringBody) {
+        this.stringBody = stringBody;
+    }
+
+    public TextFlow getTextFlow() {
+        return textFlow;
+    }
+
+    public void setTextFlow(TextFlow textFlow) {
+        this.textFlow = textFlow;
+    }
+
+    public TextFlow getHeaderFlow() {
+        return headerFlow;
+    }
+
+    public void setHeaderFlow(TextFlow headerFlow) {
+        this.headerFlow = headerFlow;
+    }
+
+    public Button getBackButton() {
+        return backButton;
+    }
+
+    public void setBackButton(Button backButton) {
+        this.backButton = backButton;
+    }
 }
