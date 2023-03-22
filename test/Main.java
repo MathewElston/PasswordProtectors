@@ -7,7 +7,12 @@ import game_loop.Animation;
 import game_loop.GameState;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import layout.PassManagerBox;
+import layout.PassPhraseList;
+import layout.PasswordManagerButtons;
 import scenes.BattleScene;
 
 public class Main extends Application {
@@ -20,6 +25,8 @@ public class Main extends Application {
     BattleScene battleScene = new BattleScene(player, enemy);
     Animation animation = new Animation(player, enemy);
     GameState gameState = new GameState(battleScene);
+    PassPhraseList phraseList = new PassPhraseList(player);
+    PasswordManagerButtons passButtons = new PasswordManagerButtons();
 
     @Override
     public void start(Stage stage) {
@@ -27,6 +34,11 @@ public class Main extends Application {
         enemy.setName("Billy");
         enemy.setSpeed(5);
         player.setSpeed(10);
+        ((Player) player).addPassword("addPassword");
+        ((Player) player).addPassword("2Password");
+
+        PassManagerBox passManagerBox = new PassManagerBox(player);
+        Pane root = new Pane();
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long timeStamp) {
@@ -39,7 +51,8 @@ public class Main extends Application {
             }
         };
 
-        stage.setScene(battleScene);
+        Scene testScene = new Scene(passManagerBox);
+        stage.setScene(testScene);
         timer.start();
         stage.show();
     }
