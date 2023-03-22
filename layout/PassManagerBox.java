@@ -22,4 +22,12 @@ public class PassManagerBox extends Pane {
         this.getChildren().add(container);
         this.setStyle("-fx-background-color: white;");
     }
+
+    public void show() {
+        this.setVisible(true);
+    }
+
+    public void hide() {
+        this.setVisible(false);
+    }
 }

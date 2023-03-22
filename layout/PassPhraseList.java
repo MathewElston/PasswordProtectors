@@ -93,5 +93,4 @@ public class PassPhraseList extends HBox {
                 }
 
         }
-
 }

@@ -52,6 +52,7 @@ public class Main extends Application {
         };
 
         Scene testScene = new Scene(passManagerBox);
+        passManagerBox.hide();
         stage.setScene(testScene);
         timer.start();
         stage.show();
