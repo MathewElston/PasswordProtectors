@@ -43,7 +43,7 @@ public class BattleScreen extends VBox {
         return hud;
     }
 
-    public void setHud(BattleHud hudRef) {
-        this.hud = hudRef;
+    public void setHud(BattleHud hud) {
+        this.hud = hud;
     }
 }

@@ -1,8 +1,10 @@
 package game_loop;
 
 import characters.Character;
+import characters.Player;
 import javafx.scene.control.ProgressBar;
 import layout.BattleFields;
+import layout.PasswordStrengthBox;
 import scenes.BattleScene;
 
 public class GameState {
@@ -37,6 +39,29 @@ public class GameState {
         }
     }
 
+    private void passwordStengthUpdate(Character player) {
+
+        PasswordStrengthBox strengthBox = this.battleScene.getBattleScreen().getHud().getStrengthBox();
+        ProgressBar passwordProgress = strengthBox.getStrengthBar();
+        if (player instanceof Player) {
+            passwordProgress.setProgress(((Player) player).getEquippedPassword().checkPasswordStrength() / 5 + 0.1);
+            if (passwordProgress.getProgress() < 0.25) {
+                passwordProgress.setStyle("-fx-accent: red;");
+                strengthBox.getPasswordStrengthLabel().setStyle("-fx-text-fill: rgb(229, 57, 53);");
+                strengthBox.getPasswordStrengthLabel().setText("WEAK");
+            } else if (passwordProgress.getProgress() >= 0.25 && passwordProgress.getProgress() < .80) {
+                passwordProgress.setStyle("-fx-accent: yellow;");
+                strengthBox.getPasswordStrengthLabel().setStyle("-fx-text-fill: rgb(255, 185, 0);");
+                strengthBox.getPasswordStrengthLabel().setText("MEDIUM");
+            } else if ((passwordProgress.getProgress() >= 0.80)) {
+                passwordProgress.setStyle("-fx-accent: green;");
+                strengthBox.getPasswordStrengthLabel().setStyle("-fx-text-fill: rgb(139, 195, 74);");
+                strengthBox.getPasswordStrengthLabel().setText("STRONG");
+            }
+        }
+
+    }
+
     private void updateEnemyProgress(Character enemy) {
         enemyProgressBar = battleScene.getBattleScreen().getHud().getFields().getEnemyProgressBar();
         double enemySpeed = (double) enemy.getSpeed() / timerSpeed;
@@ -69,8 +94,8 @@ public class GameState {
         fields.getEnemyNameLabel().setText(enemy.getName());
         fields.getEnemyHealthLabel().setText(enemy.getHealth() + " / " + enemy.getMaxHealth());
         fields.getEnemyAPLabel().setText(enemy.getAbilityPoints() + " / " + enemy.getAbilityPoints());
+        passwordStengthUpdate(player);
         updatePlayerProgress(player);
         updateEnemyProgress(enemy);
     }
-
 }

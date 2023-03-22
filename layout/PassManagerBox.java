@@ -15,7 +15,7 @@ public class PassManagerBox extends Pane {
     public PassManagerBox(Character player) {
         super();
         this.passPhraseList = new PassPhraseList(player);
-        this.passwordManagerButtons = new PasswordManagerButtons();
+        this.passwordManagerButtons = new PasswordManagerButtons(player);
         this.passwordManagerButtons.setAlignment(Pos.CENTER);
         this.container.getChildren().addAll(passPhraseList, passwordManagerButtons);
         this.popup.getContent().add(container);
