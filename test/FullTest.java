@@ -10,7 +10,12 @@ import game_loop.GameState;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import layout.PassManagerBox;
 import layout.PassPhraseList;
+import layout.PasswordManagerButtons;
+import layout.PasswordStrengthBox;
+import layout.PlayerButtons;
+import passwords.Password;
 import scenes.BattleScene;
 import scenes.InfoScene;
 import scenes.PassManagerScene;
@@ -49,16 +54,17 @@ public class FullTest extends Application {
             primaryStage.setScene(battleScene);
             timer.start();
         });
-
         // password manager scene
-        battleScene.getBattleScreen().getHud().getPlayerButtons().getPasswordButton().setOnAction(event -> {
+        PasswordManagerButtons passwordManagerButtons = passManagerScene.getPassBox().getPasswordManagerButtons();
+        PassPhraseList passPhraseList = passManagerScene.getPassBox().getPassPhraseList();
+        PlayerButtons playerButtons = battleScene.getBattleScreen().getHud().getPlayerButtons();
+
+        playerButtons.getPasswordButton().setOnAction(event -> {
             primaryStage.setScene(passManagerScene);
             timer.start();
         });
-        passManagerScene.getPassBox().getPasswordManagerButtons().getAddButton().setOnAction(event -> {
-            String randomString = "";
-            Random random = new Random(System.nanoTime());
-            PassPhraseList passPhraseList = passManagerScene.getPassBox().getPassPhraseList();
+
+        passwordManagerButtons.getAddButton().setOnAction(event -> {
             if (passPhraseList.getWordPhraseListView().getSelectionModel().getSelectedItem() != null
                     && passPhraseList.getDigitPhraseListView().getSelectionModel().getSelectedItem() != null
                     && passPhraseList.getSpecialCharPhraseListView().getSelectionModel().getSelectedItem() != null) {
@@ -72,10 +78,63 @@ public class FullTest extends Application {
             }
         });
 
-        // info scene
-        battleScene.getBattleScreen().getHud().getPlayerButtons().getInfoButton().setOnAction(event ->
+        passwordManagerButtons.getRemoveButton().setOnAction(event -> {
+            if (passPhraseList.getPasswordListView().getSelectionModel().getSelectedItem() != null) {
+                int index = passPhraseList.getPasswordListView().getSelectionModel().getSelectedIndex();
+                ((Player) player).removePassword(index);
+                passPhraseList.getPasswordListView().getItems().remove(index);
+            }
+        });
 
-        {
+        passwordManagerButtons.getRandomButton().setOnAction(event -> {
+            String randomString = "";
+            Random random = new Random(System.nanoTime());
+            int wordPhraseIndex = random.nextInt(passPhraseList.getWordPhraseListView().getItems().size());
+            int digitPhraseIndex = random.nextInt(passPhraseList.getDigitPhraseListView().getItems().size());
+            int specialCharPhraseIndex = random
+                    .nextInt(passPhraseList.getSpecialCharPhraseListView().getItems().size());
+            randomString += passPhraseList.getWordPhraseListView().getItems().get(wordPhraseIndex);
+            randomString += passPhraseList.getDigitPhraseListView().getItems().get(digitPhraseIndex);
+            randomString += passPhraseList.getSpecialCharPhraseListView().getItems().get(specialCharPhraseIndex);
+            ((Player) player).addPassword(randomString);
+            passPhraseList.getPasswordListView().getItems()
+                    .add(((Player) player).getPasswordManager().get(((Player) player).getPasswordManager().size() - 1));
+        });
+
+        passwordManagerButtons.getCloseButton().setOnAction(event -> {
+            primaryStage.setScene(battleScene);
+            timer.start();
+        });
+
+        PasswordStrengthBox strengthBox = battleScene.getBattleScreen().getHud().getStrengthBox();
+
+        passwordManagerButtons.getEquipButton().setOnAction(event -> {
+            if ((passPhraseList.getPasswordListView().getSelectionModel() != null)) {
+                ((Player) player).setEquippedPassword(
+                        passPhraseList.getPasswordListView().getSelectionModel().getSelectedItem());
+                passwordManagerButtons.getCurrentlyEquipped()
+                        .setText(((Player) player).getEquippedPassword().getValue());
+                strengthBox.getStrengthBar()
+                        .setProgress(((Player) player).getEquippedPassword().checkPasswordStrength() / 5);
+                if (strengthBox.getStrengthBar().getProgress() < 0.25) {
+                    strengthBox.getStrengthBar().setStyle("-fx-accent: red;");
+                    strengthBox.getPasswordStrengthLabel().setStyle("-fx-text-fill: rgb(229, 57, 53);");
+                    strengthBox.getPasswordStrengthLabel().setText("WEAK");
+                } else if (strengthBox.getStrengthBar().getProgress() >= 0.25
+                        && strengthBox.getStrengthBar().getProgress() < .80) {
+                    strengthBox.getStrengthBar().setStyle("-fx-accent: yellow;");
+                    strengthBox.getPasswordStrengthLabel().setStyle("-fx-text-fill: rgb(255, 185, 0);");
+                    strengthBox.getPasswordStrengthLabel().setText("MEDIUM");
+                } else if (strengthBox.getStrengthBar().getProgress() >= 0.80) {
+                    strengthBox.getStrengthBar().setStyle("-fx-accent: green;");
+                    strengthBox.getPasswordStrengthLabel().setStyle("-fx-text-fill: rgb(139, 195, 74);");
+                    strengthBox.getPasswordStrengthLabel().setText("STRONG");
+                }
+            }
+        });
+
+        // info scene
+        playerButtons.getInfoButton().setOnAction(event -> {
             primaryStage.setScene(infoScene);
             timer.stop();
 

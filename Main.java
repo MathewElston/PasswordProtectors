@@ -347,7 +347,6 @@ public class Main extends Application {
                 int index = passwordListView.getSelectionModel().getSelectedIndex();
                 ((Player) player).removePassword(index);
                 passwordListView.getItems().remove(index);
-
             }
         });
         passwordManagerRandomButton.setOnAction(event -> {
